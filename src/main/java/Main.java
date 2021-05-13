@@ -6,9 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -25,12 +27,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 
 public  class Main extends Application {
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
         primaryStage.show();
         primaryStage.setTitle("Minesweeper by Silyukov Maksim");
         primaryStage.setWidth(900);
@@ -41,7 +46,7 @@ public  class Main extends Application {
         Font font = new Font("Arial", 25);
 
 
-        VBox vboxmain = new VBox();
+        /*VBox vboxmain = new VBox();
         vboxmain.setAlignment(Pos.CENTER);
         vboxmain.setPadding(new Insets(10, 10, 10, 10));
         ObservableList<String> modes = FXCollections.observableArrayList("Новичок(9х9, 10 мин)", "Любитель(16х16, 40 мин)", "Эксперт(16х30, 99 мин)", "Особый");
@@ -90,8 +95,14 @@ public  class Main extends Application {
 
         primaryStage.setScene(primaryScene);
 
-        primaryStage.show();
+        primaryStage.show();*/
+        FXMLLoader loader = new FXMLLoader();
+        URL xmlUrl = getClass().getResource("/mainScene.fxml");
+        loader.setLocation(xmlUrl);
+        Parent root = loader.load();
 
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
 
     }
     public static void main(String[] args) {
