@@ -31,15 +31,15 @@ import java.net.URL;
 import java.util.List;
 
 
-public  class Main extends Application {
+public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Application.Parameters params = getParameters();
+       /* Application.Parameters params = getParameters();
         List<String> unnamedParams = getParameters().getUnnamed();
         System.out.println(unnamedParams);
-        Integer width = Integer.parseInt(unnamedParams.get(0));
-        Integer height = Integer.parseInt(unnamedParams.get(1));
+        int width = Integer.parseInt(unnamedParams.get(0));
+        int height = Integer.parseInt(unnamedParams.get(1));*/
         primaryStage.setTitle("Minesweeper by Silyukov Maksim");
         primaryStage.setWidth(900);
         primaryStage.setHeight(800);
@@ -49,10 +49,10 @@ public  class Main extends Application {
 
 
         GridPane grid = new GridPane();
-        for(int y = 1; y <= height; y++) {
-            for(int x = 1; x <= width; x++) {
+        for (int y = 1; y <= 20; y++) {
+            for (int x = 1; x <= 30; x++) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/cell.fxml"));
-                ImageView a =  loader.load();
+                ImageView a = loader.load();
                 grid.add(a, x, y);
             }
         }
@@ -64,16 +64,17 @@ public  class Main extends Application {
         vboxmain.setPadding(new Insets(10, 10, 10, 10));
         ToolBar tools = loader.load();
         vboxmain.getChildren().addAll(tools, grid);
-        Scene primaryScene = new Scene(vboxmain, Color.rgb(192,192,192));
+        Scene primaryScene = new Scene(vboxmain, Color.rgb(192, 192, 192));
         primaryStage.setScene(primaryScene);
 
         primaryStage.show();
 
     }
+
     public static void main(Integer w, Integer h, Integer b) {
-        Grid mainGrid = new Grid(w,h,b);
-        String[] args = new String[]{w.toString(),h.toString()};
-        Application.launch(Main.class,args);
+        Grid mainGrid = new Grid(w, h, b);
+        String[] args = new String[]{w.toString(), h.toString()};
+        Application.launch(Main.class, args);
 
 
     }

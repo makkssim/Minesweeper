@@ -10,13 +10,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 import org.apache.commons.lang3.math.NumberUtils;
 
 public class Controller {
+    public Label lblBomb;
     @FXML
     private ComboBox CmbDif;
     @FXML
@@ -31,25 +34,24 @@ public class Controller {
     private static Integer b;
 
 
-
-
-
-
-    public void startClick(MouseEvent mouseEvent) throws IOException {
-
+    public void startClick(MouseEvent mouseEvent){
 
 
     }
 
     public void cellClick(MouseEvent mouseEvent) {
-        if(mouseEvent.getButton() == MouseButton.PRIMARY){  }
+        if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            cl.setImage(new Image(getClass().getResourceAsStream("/one.png")));
+        }
+        if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+            cl.setImage(new Image(getClass().getResourceAsStream("/flag.png")));
+        }
 
-        cl.setImage(new Image(getClass().getResourceAsStream("/one.png")));
 
     }
 
     public void difChanged(ActionEvent actionEvent) {
-        Dialog<Map<String,Integer>> dialog = new Dialog<>();
+        Dialog<Map<String, Integer>> dialog = new Dialog<>();
         dialog.setTitle("Custom grid settings");
         dialog.setHeaderText(null);
         dialog.setGraphic(null);
@@ -75,45 +77,51 @@ public class Controller {
 
         Node okButton = dialog.getDialogPane().lookupButton(ButtonType.OK);
         okButton.setDisable(true);
-        width.textProperty().addListener((observable, oldValue, newValue) -> {
-            okButton.setDisable(btnCheck(width.getText(),height.getText(),bombs.getText()));
-        });
-        height.textProperty().addListener((observable2, oldValue2, newValue2) -> {
-            okButton.setDisable(btnCheck(width.getText(),height.getText(),bombs.getText()));
-        });
-        bombs.textProperty().addListener((observable3, oldValue3, newValue3) -> {
-            okButton.setDisable(btnCheck(width.getText(),height.getText(),bombs.getText()));
-        });
+        width.textProperty().addListener((observable, oldValue, newValue) -> okButton.setDisable(btnCheck(width.getText(), height.getText(), bombs.getText())));
+        height.textProperty().addListener((observable2, oldValue2, newValue2) -> okButton.setDisable(btnCheck(width.getText(), height.getText(), bombs.getText())));
+        bombs.textProperty().addListener((observable3, oldValue3, newValue3) -> okButton.setDisable(btnCheck(width.getText(), height.getText(), bombs.getText())));
 
         dialog.getDialogPane().setContent(grid);
         dialog.setResultConverter(dialogButton -> {
 
             Map res = new HashMap();
-            res.put("width", Integer.parseInt( width.getText()));
-            res.put("height", Integer.parseInt( height.getText()));
-            res.put("bombs", Integer.parseInt( bombs.getText()));
-                return res;
+            res.put("width", Integer.parseInt(width.getText()));
+            res.put("height", Integer.parseInt(height.getText()));
+            res.put("bombs", Integer.parseInt(bombs.getText()));
+            return res;
         });
 
 
-        switch ((String) CmbDif.getValue()){
-            case("beginner(9х9, 10 bombs)"): w = 9;h=9;b=10; break;
-            case("intermediate(16х16, 40 bombs)"): w = 16;h=16;b=40; break;
-            case("expert(16х30, 99 bombs)"): w = 16;h=30;b=99; break;
-            case("customizable"):
-                Optional<Map<String,Integer>> custom = dialog.showAndWait();
+        switch ((String) CmbDif.getValue()) {
+            case ("beginner(9х9, 10 bombs)"):
+                w = 9;
+                h = 9;
+                b = 10;
+                break;
+            case ("intermediate(16х16, 40 bombs)"):
+                w = 16;
+                h = 16;
+                b = 40;
+                break;
+            case ("expert(16х30, 99 bombs)"):
+                w = 16;
+                h = 30;
+                b = 99;
+                break;
+            case ("customizable"):
+                Optional<Map<String, Integer>> custom = dialog.showAndWait();
                 w = custom.get().get("width");
                 h = custom.get().get("height");
                 b = custom.get().get("bombs");
                 break;
         }
-
-
-        Main.main(w,h,b);
+        lblBomb.setText(b.toString());
     }
 
 
-    private boolean btnCheck(String w, String h, String b) {return !(NumberUtils.isParsable(w) && NumberUtils.isParsable(b) && NumberUtils.isParsable(h)
-            && Integer.parseInt(w)>=2 && Integer.parseInt(w)<=40 && Integer.parseInt(h)>=2 && Integer.parseInt(h)<=40
-            && Integer.parseInt(b)>=1 && Integer.parseInt(b)<=999); }
+    private boolean btnCheck(String w, String h, String b) {
+        return !(NumberUtils.isParsable(w) && NumberUtils.isParsable(b) && NumberUtils.isParsable(h)
+                && Integer.parseInt(w) >= 2 && Integer.parseInt(w) <= 40 && Integer.parseInt(h) >= 2 && Integer.parseInt(h) <= 40
+                && Integer.parseInt(b) >= 1 && Integer.parseInt(b) <= 999);
+    }
 }

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.text.Font?>
+
+<ToolBar fx:id="tb" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller">
+   <Label fx:id="lbl1" text="Time">
+      <font>
+         <Font size="18.0"/>
+      </font>
+      <padding>
+         <Insets left="250.0"/>
+      </padding>
+   </Label>
+   <Label text="000">
+      <font>
+         <Font size="18.0"/>
+      </font>
+   </Label>
+   <ComboBox fx:id="CmbDif" onAction="#difChanged" prefWidth="150.0" promptText="Difficulty">
+      <items>
+         <FXCollections fx:factory="observableArrayList">
+            <String fx:id="beginner" fx:value="beginner(9х9, 10 bombs)"/>
+            <String fx:id="intermediate" fx:value="intermediate(16х16, 40 bombs)"/>
+            <String fx:id="expert" fx:value="expert(16х30, 99 bombs)"/>
+            <String fx:id="customizable" fx:value="customizable"/>
+         </FXCollections>
+      </items>
+   </ComboBox>
+   <Button fx:id="btnStart" mnemonicParsing="false" onMouseClicked="#startClick" prefWidth="62.0" text="Старт"/>
+   <Label fx:id="lbl11" prefHeight="27.0" prefWidth="61.0" text="Bombs">
+      <font>
+         <Font size="18.0"/>
+      </font>
+   </Label>
+   <Label fx:id="lblBomb" text="000">
+      <font>
+         <Font size="18.0"/>
+      </font>
+   </Label>
+</ToolBar>
