@@ -13,6 +13,7 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -34,14 +35,22 @@ public class Controller {
     private static Integer b;
 
 
-    public void startClick(MouseEvent mouseEvent){
+    public void startClick(MouseEvent mouseEvent) {
 
 
     }
 
     public void cellClick(MouseEvent mouseEvent) {
+        String gh = "";
+        List list = cl.getParent().getChildrenUnmodifiable();
+        System.out.println(list);
+        for (int i = 0; i < list.size(); i++) {
+            if (cl == list.get(i)) gh = i / 30 + "," + i % 30;
+        }
+
         if (mouseEvent.getButton() == MouseButton.PRIMARY) {
             cl.setImage(new Image(getClass().getResourceAsStream("/one.png")));
+            btnStart.setText(gh);
         }
         if (mouseEvent.getButton() == MouseButton.SECONDARY) {
             cl.setImage(new Image(getClass().getResourceAsStream("/flag.png")));
