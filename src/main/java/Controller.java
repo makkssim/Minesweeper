@@ -1,14 +1,20 @@
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
@@ -20,7 +26,12 @@ import java.util.Optional;
 import org.apache.commons.lang3.math.NumberUtils;
 
 public class Controller {
+    @FXML
     public Label lblBomb;
+    @FXML
+    private static GridPane gp;
+    @FXML
+    private ToolBar tb;
     @FXML
     private ComboBox CmbDif;
     @FXML
@@ -30,36 +41,71 @@ public class Controller {
     @FXML
     private ImageView cl;
     @FXML
-    private static Integer w;
-    private static Integer h;
-    private static Integer b;
+    private  Integer w = 30;
+    private  Integer h = 16;
+    private  Integer b = 99;
+    private  Integer flags = 0;
+    private boolean isGameStarted;
+    Grid mainGrid = new Grid(w, h, b);
 
 
-    public void startClick(MouseEvent mouseEvent) {
+    public void startClick(MouseEvent mouseEvent) throws IOException {
+
+        Stage stage = new Stage();
+        newScene(h,w);
 
 
     }
+    public static GridPane getGP(){
+        return gp;
+    }
 
-    public void cellClick(MouseEvent mouseEvent) {
-        String gh = "";
-        List list = cl.getParent().getChildrenUnmodifiable();
-        System.out.println(list);
+    public void cellClick(MouseEvent mouseEvent) throws IOException {
+
+        int cellH = 0;
+        int cellW = 0;
+        GridPane gp = (GridPane) cl.getParent();
+        List list = gp.getChildren();
         for (int i = 0; i < list.size(); i++) {
-            if (cl == list.get(i)) gh = i / 30 + "," + i % 30;
+            if (cl == list.get(i)) {
+                cellH = i / w;
+                cellW = i % w;
+            }
         }
+        if(!mainGrid.grid[cellW][cellH].isOpened()) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                mainGrid.openCell(cellW, cellH);
+                for (int i = 0; i < list.size(); i++) {
+                    int H = i / w;
+                    int W = i % w;
+                    if(mainGrid.grid[W][H].isOpened()){
+                        //System.out.println(W+" "+H);
+                        ImageView thisCell = (ImageView)list.get(i);
+                        thisCell.setImage(new Image(getClass().getResourceAsStream("/" + mainGrid.grid[W][H].getValue() + ".png")));}
+                }
 
-        if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-            cl.setImage(new Image(getClass().getResourceAsStream("/one.png")));
-            btnStart.setText(gh);
+
+
+            }
+            if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                if(mainGrid.grid[cellW][cellH].getMark() == Cell.Mark.square){
+                cl.setImage(new Image(getClass().getResourceAsStream("/flag.png")));
+                mainGrid.grid[cellW][cellH].setMark(Cell.Mark.flag);
+                flags++;
+                }
+                else{
+                    cl.setImage(new Image(getClass().getResourceAsStream("/square.png")));
+                    mainGrid.grid[cellW][cellH].setMark(Cell.Mark.square);
+                    flags--;
+                }
+                lblBomb.setText(String.valueOf(b-flags));
+
+            }
         }
-        if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-            cl.setImage(new Image(getClass().getResourceAsStream("/flag.png")));
-        }
-
-
     }
 
     public void difChanged(ActionEvent actionEvent) {
+        lblBomb.setText("fuck u");
         Dialog<Map<String, Integer>> dialog = new Dialog<>();
         dialog.setTitle("Custom grid settings");
         dialog.setHeaderText(null);
@@ -113,8 +159,8 @@ public class Controller {
                 b = 40;
                 break;
             case ("expert(16х30, 99 bombs)"):
-                w = 16;
-                h = 30;
+                w = 30;
+                h = 16;
                 b = 99;
                 break;
             case ("customizable"):
@@ -126,7 +172,36 @@ public class Controller {
         }
         lblBomb.setText(b.toString());
     }
+    public void newScene(Integer height, Integer width) throws IOException {
+        Stage curStage = (Stage)tb.getScene().getWindow();
+        GridPane grid = new GridPane();
 
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/cell.fxml"));
+        loader.setLocation(getClass().getResource("/tools.fxml"));
+        VBox vboxmain = new VBox();
+        vboxmain.setAlignment(Pos.CENTER);
+        vboxmain.setPadding(new Insets(10, 10, 10, 10));
+        Controller as = loader.getController();
+        ToolBar tools = loader.load();
+
+
+        grid.setId("gp");
+        for (int y = 1; y <= height; y++) {
+            for (int x = 1; x <=width; x++) {
+
+                loader.setLocation(getClass().getResource("/cell.fxml"));
+                loader.setController(as);
+                ImageView a = loader.load();
+                grid.add(a, x, y);
+            }
+        }
+        grid.setAlignment(Pos.CENTER);
+
+        vboxmain.getChildren().addAll(tools, grid);
+        Scene primaryScene = new Scene(vboxmain, Color.rgb(192, 192, 192));
+        curStage.setScene(primaryScene);
+    }
 
     private boolean btnCheck(String w, String h, String b) {
         return !(NumberUtils.isParsable(w) && NumberUtils.isParsable(b) && NumberUtils.isParsable(h)

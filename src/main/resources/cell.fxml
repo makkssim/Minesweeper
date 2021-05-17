@@ -4,7 +4,7 @@
 <?import javafx.scene.image.ImageView?>
 
 
-<ImageView fx:id="cl" onMouseClicked="#cellClick" pickOnBounds="true" preserveRatio="true"
-           xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller">
+<ImageView fx:id="cl"  pickOnBounds="true" preserveRatio="true"
+           xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
    <Image url="@square.png"/>
 </ImageView>

@@ -4,9 +4,13 @@ import javafx.scene.image.ImageView;
 public class Cell {
     private boolean opened;
 
+    public boolean isOpened() {
+        return opened;
+    }
+
     public enum Mark {square, flag}
 
-    public Mark mark;
+    private Mark mark;
 
     public enum Value {zero, one, two, three, four, five, six, seven, eight, bomb}
 
@@ -29,8 +33,10 @@ public class Cell {
         return this.value;
     }
 
+
+
     public Boolean isBomb() {
-        return value == Value.bomb;
+        return this.value == Value.bomb;
     }
 
     public void open() {
