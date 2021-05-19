@@ -1,5 +1,3 @@
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class Cell {
     private boolean opened;
@@ -12,7 +10,7 @@ public class Cell {
 
     private Mark mark;
 
-    public enum Value {zero, one, two, three, four, five, six, seven, eight, bomb}
+    public enum Value {zero, one, two, three, four, five, six, seven, eight, bomb, bombAfterLose,wrong}
 
     private Value value;
 
@@ -32,7 +30,6 @@ public class Cell {
     public Value getValue() {
         return this.value;
     }
-
 
 
     public Boolean isBomb() {

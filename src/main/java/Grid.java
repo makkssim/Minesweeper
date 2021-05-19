@@ -1,8 +1,4 @@
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 
-import java.lang.reflect.Array;
 
 public class Grid {
     private Integer width;
@@ -15,6 +11,7 @@ public class Grid {
         this.bombs = b;
         this.height = h;
         this.width = w;
+
         this.grid = new Cell[this.width][this.height];
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
@@ -22,11 +19,11 @@ public class Grid {
                 this.grid[x][y].setValue(Cell.Value.zero);
             }
         }
+
         while (i < this.bombs) {
             int x = (int) (Math.random() * this.width);
             int y = (int) (Math.random() * this.height);
-            Cell.Value a = grid[x][y].getValue();
-            if (this.grid[x][y].getValue().equals(Cell.Value.zero)) {
+            if (this.grid[x][y].getValue() != Cell.Value.bomb) {
                 this.grid[x][y].setValue(Cell.Value.bomb);
                 i++;
             }
@@ -67,6 +64,7 @@ public class Grid {
         }
     }
 
+
     private Integer bombsNear(Integer x, Integer y) {
 
         Integer bs = 0;
@@ -78,21 +76,32 @@ public class Grid {
         return bs;
     }
 
-
     public void openCell(Integer x, Integer y) {
-        GridPane gridPane = Controller.getGP();
+        if (this.grid[x][y].isBomb()) {
+            this.grid[x][y].setValue(Cell.Value.bombAfterLose);
+            endGame();
+        }
         if (!this.grid[x][y].isOpened()) this.grid[x][y].open();
-        if (this.grid[x][y].isBomb()) lose();
+
         if (this.grid[x][y].getValue() == Cell.Value.zero)
             for (int i = x - 1; i <= x + 1; i++) {
                 for (int j = y - 1; j <= y + 1; j++) {
-                    if (i >= 1 && i <= this.width && j >= 1 && j <= this.height && !this.grid[i][j].isOpened()) this.openCell(i, j);
+                    if (i >= 0 && i < this.width && j >= 0 && j < this.height && !this.grid[i][j].isOpened())
+                        this.openCell(i, j);
                 }
+            }
+    }
+
+    public void endGame() {
+        for (int y = 0; y < this.height; y++) {
+            for (int x = 0; x < this.width; x++) {
+                if (this.grid[x][y].getValue() != Cell.Value.bomb && this.grid[x][y].getMark() == Cell.Mark.flag)
+                    this.grid[x][y].setValue(Cell.Value.wrong);
+                this.grid[x][y].open();
+            }
         }
     }
 
-    private void lose() {
 
-    }
 
 }
