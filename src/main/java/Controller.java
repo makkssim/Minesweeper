@@ -86,14 +86,14 @@ public class Controller {
                     btnStart.setText("WIN!");
                     timeline.stop();
                 }
-                if (mainGrid.grid[cellW][cellH].isBomb() && mainGrid.grid[cellW][cellH].getMark() != Cell.Mark.flag){
-                    btnStart.setText("LOST(");
-                    timeline.stop();
-                }
+
                 if (mouseEvent.getButton() == MouseButton.PRIMARY && mainGrid.grid[cellW][cellH].getMark() != Cell.Mark.flag) {
+                    if (mainGrid.grid[cellW][cellH].isBomb() && mainGrid.grid[cellW][cellH].getMark() != Cell.Mark.flag){
+                        btnStart.setText("LOST(");
+                        timeline.stop();
+                    }
                     mainGrid.openCell(cellW, cellH);
                     showOpened(list);
-                    if (mainGrid.grid[cellW][cellH].getValue() == Cell.Value.bomb) timeline.stop();
                 }
                 if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                     int i = cellH * w + cellW;
