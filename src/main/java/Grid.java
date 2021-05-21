@@ -65,7 +65,7 @@ public class Grid {
     }
 
 
-    private Integer bombsNear(Integer x, Integer y) {
+    public Integer bombsNear(Integer x, Integer y) {
 
         Integer bs = 0;
         for (int i = x - 1; i <= x + 1; i++) {

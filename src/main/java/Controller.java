@@ -200,11 +200,7 @@ public class Controller {
         grid.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                try {
-                    cellClick(mouseEvent);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                cellClick(mouseEvent);
             }
         });
         for (int y = 1; y <= height; y++) {
