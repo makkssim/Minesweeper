@@ -31,11 +31,11 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 public class Controller {
     @FXML
-    public Label lblBomb;
+    private Label lblBomb;
     @FXML
     private static GridPane gp;
     @FXML
-    public Label lblTime;
+    private Label lblTime;
     @FXML
     private ToolBar tb;
     @FXML
@@ -78,10 +78,9 @@ public class Controller {
 
         if (cellH < h && cellW < w) {
             GridPane gp = (GridPane) mouseEvent.getSource();
-            List list = gp.getChildren();
+            List<Node> list = gp.getChildren();
             if (!mainGrid.grid[cellW][cellH].isOpened()) {
-                if(openCheck() || flagCheck()){
-                    mainGrid.endGame();
+                if(mainGrid.winCheck(flags)){
                     showOpened(list);
                     btnStart.setText("WIN!");
                     timeline.stop();
@@ -147,7 +146,7 @@ public class Controller {
         dialog.getDialogPane().setContent(grid);
         dialog.setResultConverter(dialogButton -> {
 
-            Map res = new HashMap();
+            Map<String,Integer> res = new HashMap<>();
             res.put("width", Integer.parseInt(width.getText()));
             res.put("height", Integer.parseInt(height.getText()));
             res.put("bombs", Integer.parseInt(bombs.getText()));
@@ -218,28 +217,8 @@ public class Controller {
         mainGrid = new Grid(this.w, this.h, this.b);
     }
 
-    private boolean openCheck(){
-        boolean a = true;
-        for (int y = 0; y < this.h; y++) {
-            for (int x = 0; x < this.w; x++) {
-                if(!mainGrid.grid[x][y].isOpened() && !mainGrid.grid[x][y].isBomb()) a = false;
-            }
-        }
-        return a;
-    }
 
-    private boolean flagCheck(){
-        boolean a = true;
-        if (b == flags){
-            for (int y = 0; y < this.h; y++) {
-                for (int x = 0; x < this.w; x++) {
-                    if(mainGrid.grid[x][y].getMark() != Cell.Mark.flag  && mainGrid.grid[x][y].isBomb()) a = false;
-                }
-            }
-        } else a = false;
-        return a;
-    }
-    private void showOpened(List list){
+    private void showOpened(List<Node> list){
         for (int i = 0; i < list.size(); i++) {
             int H = i / w;
             int W = i % w;

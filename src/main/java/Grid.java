@@ -1,4 +1,5 @@
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class Grid {
     private Integer width;
@@ -28,37 +29,22 @@ public class Grid {
                 i++;
             }
         }
+        HashMap<Integer,Cell.Value> values = new HashMap<>() {{
+            put(0, Cell.Value.zero);
+            put(1, Cell.Value.one);
+            put(2, Cell.Value.two);
+            put(3, Cell.Value.three);
+            put(4, Cell.Value.four);
+            put(5, Cell.Value.five);
+            put(6, Cell.Value.six);
+            put(7, Cell.Value.seven);
+            put(8, Cell.Value.eight);
+        }};
+
         for (int y = 0; y < this.height; y++) {
             for (int x = 0; x < this.width; x++) {
                 if (this.grid[x][y].getValue() != Cell.Value.bomb) {
-                    Cell.Value val = Cell.Value.zero;
-                    switch (bombsNear(x, y)) {
-                        case (1):
-                            val = Cell.Value.one;
-                            break;
-                        case (2):
-                            val = Cell.Value.two;
-                            break;
-                        case (3):
-                            val = Cell.Value.three;
-                            break;
-                        case (4):
-                            val = Cell.Value.four;
-                            break;
-                        case (5):
-                            val = Cell.Value.five;
-                            break;
-                        case (6):
-                            val = Cell.Value.six;
-                            break;
-                        case (7):
-                            val = Cell.Value.seven;
-                            break;
-                        case (8):
-                            val = Cell.Value.eight;
-                            break;
-                    }
-                    this.grid[x][y].setValue(val);
+                    this.grid[x][y].setValue(values.get(bombsNear(x,y)));
                 }
             }
         }
@@ -101,6 +87,27 @@ public class Grid {
             }
         }
     }
+
+
+    public  boolean winCheck(int flags){
+        boolean b = true;
+        for (int y = 0; y < this.height; y++) {
+            for (int x = 0; x < this.width; x++) {
+                if(!this.grid[x][y].isOpened() && !this.grid[x][y].isBomb()) b = false;
+            }
+        }
+        boolean a = true;
+        if (bombs == flags){
+            for (int y = 0; y < this.height; y++) {
+                for (int x = 0; x < this.width; x++) {
+                    if(this.grid[x][y].getMark() != Cell.Mark.flag  && this.grid[x][y].isBomb()) a = false;
+                }
+            }
+        } else a = false;
+        if (a || b) this.endGame();
+        return (a || b);
+    }
+
 
 
 

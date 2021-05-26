@@ -9,47 +9,11 @@ import static org.junit.Assert.assertTrue;
 public class MsTest {
 
     @Test
-    public void ls() throws IOException, URISyntaxException {
+    public void ls(){
         Grid grid = new Grid(30, 16, 99);
 
-        for (int y = 0; y < 16; y++) {
-            for (int x = 0; x < 30; x++) {
-                if (grid.grid[x][y].getValue() != Cell.Value.bomb) {
-                    Cell.Value val = Cell.Value.zero;
-                    switch (grid.bombsNear(x, y)) {
-                        case (1):
-                            val = Cell.Value.one;
-                            break;
-                        case (2):
-                            val = Cell.Value.two;
-                            break;
-                        case (3):
-                            val = Cell.Value.three;
-                            break;
-                        case (4):
-                            val = Cell.Value.four;
-                            break;
-                        case (5):
-                            val = Cell.Value.five;
-                            break;
-                        case (6):
-                            val = Cell.Value.six;
-                            break;
-                        case (7):
-                            val = Cell.Value.seven;
-                            break;
-                        case (8):
-                            val = Cell.Value.eight;
-                            break;
-                    }
-                    assertEquals(grid.grid[x][y].getValue(), val);
-                }
-            }
-        }
         grid.grid[0][0].setMark(Cell.Mark.flag);
         assertEquals(grid.grid[0][0].getMark(), Cell.Mark.flag);
-        grid.grid[1][1].open();
-        assertTrue(grid.grid[1][1].isOpened());
 
         int i = 0;
         int j = 0;
@@ -89,6 +53,32 @@ public class MsTest {
                 assertTrue(grid.grid[x][y].isOpened());
             }
         }
+        Grid grid1 = new Grid(30, 16, 99);
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 30; x++) {
+                if (grid1.grid[x][y].isBomb())grid1.grid[x][y].setMark(Cell.Mark.flag);
+            }
+        }
+        grid1.winCheck(99);
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 30; x++) {
+                assertTrue(grid1.grid[x][y].isOpened());
+            }
+        }
+        Grid grid2 = new Grid(30, 16, 99);
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 30; x++) {
+                if (!grid2.grid[x][y].isBomb())grid2.grid[x][y].open();
+            }
+        }
+        grid2.winCheck(0);
+        for (int y = 0; y < 16; y++) {
+            for (int x = 0; x < 30; x++) {
+                assertTrue(grid2.grid[x][y].isOpened());
+            }
+        }
+
+
 
 
     }
